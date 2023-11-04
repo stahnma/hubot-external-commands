@@ -1,0 +1,43 @@
+{
+  "name": "hubot-external-commands",
+  "version": "0.2.0",
+  "description": "This is a hubot extension designed to allow you to break free from node, coffeescript, and javascript and still have all the chat operations you'd like.",
+  "author": "stahnma",
+  "license": "MIT",
+  "main": "index.coffee",
+  "homepage": "https://github.com/stahnma/hubot-external-commands",
+  "scripts": {
+    "test": "EXPRESS_PORT=9012 mocha --require coffee-script/register \"test/**/*.coffee\" --reporter spec",
+    "lint": "jshint src/*.js test/*.js",
+    "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stahnma/hubot-external-commands.git"
+  },
+  "keywords": [
+    "external",
+    "commands",
+    "hubot",
+    "shell",
+    "bot",
+    "hubot-scripts"
+  ],
+  "bugs": {
+    "url": "https://github.com/stahnma/hubot-external-commands/issues"
+  },
+  "devDependencies": {
+    "chai": "^4.3.10",
+    "coffee-script": "^1.12.7",
+    "hubot-test-helper": "^1.9.0",
+    "husky": "^8.0.3",
+    "js-beautify": "^1.14.3",
+    "jshint": "^2.13.4",
+    "matchdep": "^2.0.0",
+    "mocha": "^10.2.0",
+    "nock": "^13.3.3",
+    "release-it": "^16.2.1",
+    "sinon": "^16.0.0",
+    "sinon-chai": "^3.7.0"
+  }
+}
