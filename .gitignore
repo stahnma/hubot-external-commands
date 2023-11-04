@@ -1,0 +1,12 @@
+node_modules
+package-lock.json
+.hubot-history
+.DS_Store*
+.hubot_history
+/.project
+hubot-brain.json
+.node-gyp
+.npm
+.ssh
+.gitconfig
+tmp/
