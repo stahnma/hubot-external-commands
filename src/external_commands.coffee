@@ -17,7 +17,7 @@
 #
 
 # runs shell commands from hubot
-sys   = require 'sys'
+util   = require 'util'
 spawn = require('child_process').spawn
 exec  = require('child_process').exec
 env   = process.env
@@ -27,6 +27,8 @@ path  = require 'path'
 # Setup the Environment
 if !env.HUBOT_EXTERNAL_COMMANDS_DIR
   env.HUBOT_EXTERNAL_COMMANDS_DIR = "./shell"
+else
+	env.HUBOT_EXTERNAL_COMMANDS_DIR = env.HUBOT_EXTERNAL_COMMANDS_DIR
 
 env.PATH = env.HUBOT_EXTERNAL_COMMANDS_DIR + ':' + env.PATH
 
@@ -68,15 +70,13 @@ module.exports = (robot) ->
     exec "find --version", (error, stdout, stderr) ->
        if error && error.code != 0
          robot.logger.error error
-         robot.logger.error "error retrieving commands from shell:\n#{sys.inspect error}"
+         robot.logger.error "error retrieving commands from shell:\n#{util.inspect error}"
          robot.logger.error stderr
          robot.logger.error "Error determining find version"
        else if stdout.match(/GNU findutils/)
-         robot.logger.debug "GNU find version detected"
          findCommand = "find #{env.HUBOT_EXTERNAL_COMMANDS_DIR} -maxdepth 1 -executable -not -type d -print"
          findCommandCallback(findCommand)
        else
-         robot.logger.debug "BSD find version detected"
          findCommand = "find #{env.HUBOT_EXTERNAL_COMMANDS_DIR} -maxdepth 1 -perm +111 -not -type d -print"
          findCommandCallback(findCommand)
 
@@ -88,12 +88,12 @@ module.exports = (robot) ->
       exec findCommand, (error, stdout, stderr) ->
         if error && error.code != 0
           robot.logger.error error
-          robot.logger.error "error retrieving commands from shell:\n#{sys.inspect error}"
+          robot.logger.error "error retrieving commands from shell:\n#{util.inspect error}"
           robot.logger.error stderr
           robot.logger.error "oh well, shell commands won't be available"
         else
           stdout.split("\n").forEach addCommand
-          robot.logger.debug "loaded #{shellCommands.length} commands from shell: #{shellCommands.join(', ')}"
+          robot.logger.info "loaded #{shellCommands.length} commands from shell: #{shellCommands.join(', ')}"
           if msg
             msg.send "shell commands refreshed: #{shellCommands.length} total"
 
