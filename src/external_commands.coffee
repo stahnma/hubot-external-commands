@@ -101,10 +101,10 @@ module.exports = (robot) ->
   refreshCommands(null)
 
   ## Robot commands
-  robot.hear /refresh-shell\s*$/i, (msg) ->
+  robot.respond /refresh-shell\s*$/i, (msg) ->
     refreshCommands(msg)
 
-  robot.hear /([\w-]+) ?(.*?)$/i, (msg) ->
+  robot.respond /([\w-]+) ?(.*?)$/i, (msg) ->
     command = msg.match[1].toLowerCase().replace(/[`|'";&$!{}<>]/gm, '')
     args    = (msg.match[2] || '').replace(/[`|'";&$!{}<>]/gm, '')
     argv    = args.split(' ').filter (s) -> return s != '' # "
@@ -127,4 +127,3 @@ module.exports = (robot) ->
       robot.logger.info "Waiting on the child for #{command}"
     else
       return
-

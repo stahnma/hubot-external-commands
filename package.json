@@ -7,7 +7,7 @@
   "main": "index.coffee",
   "homepage": "https://github.com/stahnma/hubot-external-commands",
   "scripts": {
-    "test": "EXPRESS_PORT=9012 mocha --require coffee-script/register \"test/**/*.coffee\" --reporter spec",
+    "dev": "PATH=$PATH:node_modules/.bin hubot -r src -r hold --alias '!'",
     "lint": "jshint src/*.js test/*.js",
     "prepare": "husky install"
   },
