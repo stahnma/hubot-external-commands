@@ -7,7 +7,7 @@
   "main": "index.coffee",
   "homepage": "https://github.com/stahnma/hubot-external-commands",
   "scripts": {
-    "dev": "PATH=$PATH:node_modules/.bin hubot -r src -r hold --alias '!'",
+    "dev": "HUBOT_EXTERNAL_COMMANDS_DIR=$PWD/fixtures/shell PATH=$PATH:node_modules/.bin hubot -r src -r fixtures/help --alias '!'",
     "lint": "jshint src/*.js test/*.js",
     "prepare": "husky install"
   },
