@@ -8,7 +8,7 @@
 #   HUBOT_EXTERNAL_COMMANDS_DIR - path to where it should look for external commands
 #
 # Commands:
-#   hubot refresh-shell - reload known shell commands
+#   hubot refresh-commands - rescan and load external commands
 #
 # Author:
 #   rick, stahnma
@@ -16,7 +16,7 @@
 # Category: workflow
 #
 
-# runs shell commands from hubot
+# runs external commands from hubot
 util   = require 'util'
 spawn = require('child_process').spawn
 exec  = require('child_process').exec
@@ -35,7 +35,7 @@ env.PATH = env.HUBOT_EXTERNAL_COMMANDS_DIR + ':' + env.PATH
 module.exports = (robot) ->
 
   robot.logger.info "HUBOT_EXTERNAL_COMMANDS_DIR: #{env.HUBOT_EXTERNAL_COMMANDS_DIR}"
-  shellCommands = []
+  externalCommands = []
 
   # Helper Functions
   addCommand = (command) ->
@@ -45,7 +45,7 @@ module.exports = (robot) ->
         return
       command = command.replace /^.*\//, ''
       robot.commands.push "#{robot.name} #{command}"
-      shellCommands.push(command)
+      externalCommands.push(command)
       robot.commands = Array.from(new Set(robot.commands))
       findAndPushCommands(env.HUBOT_EXTERNAL_COMMANDS_DIR)
 
@@ -70,7 +70,7 @@ module.exports = (robot) ->
     exec "find --version", (error, stdout, stderr) ->
        if error && error.code != 0
          robot.logger.error error
-         robot.logger.error "error retrieving commands from shell:\n#{util.inspect error}"
+         robot.logger.error "error retrieving commands from external commands:\n#{util.inspect error}"
          robot.logger.error stderr
          robot.logger.error "Error determining find version"
        else if stdout.match(/GNU findutils/)
@@ -81,27 +81,27 @@ module.exports = (robot) ->
          findCommandCallback(findCommand)
 
   refreshCommands = (msg) ->
-    robot.commands = robot.commands.filter (x) -> !(x in shellCommands)
-    shellCommands = []
+    robot.commands = robot.commands.filter (x) -> !(x in externalCommands)
+    externalCommands = []
 
     findFind (findCommand) ->
       exec findCommand, (error, stdout, stderr) ->
         if error && error.code != 0
           robot.logger.error error
-          robot.logger.error "error retrieving commands from shell:\n#{util.inspect error}"
+          robot.logger.error "error retrieving commands from external commands:\n#{util.inspect error}"
           robot.logger.error stderr
-          robot.logger.error "oh well, shell commands won't be available"
+          robot.logger.error "oh well, external commands won't be available"
         else
           stdout.split("\n").forEach addCommand
-          robot.logger.info "loaded #{shellCommands.length} commands from shell: #{shellCommands.join(', ')}"
+          robot.logger.info "loaded #{externalCommands.length} commands from external commands: #{externalCommands.join(', ')}"
           if msg
-            msg.send "shell commands refreshed: #{shellCommands.length} total"
+            msg.send "external commands commands refreshed: #{externalCommands.length} total"
 
   # Init
   refreshCommands(null)
 
   ## Robot commands
-  robot.respond /refresh-shell\s*$/i, (msg) ->
+  robot.respond /refresh-commands\s*$/i, (msg) ->
     refreshCommands(msg)
 
   robot.respond /([\w-]+) ?(.*?)$/i, (msg) ->
@@ -109,7 +109,7 @@ module.exports = (robot) ->
     args    = (msg.match[2] || '').replace(/[`|'";&$!{}<>]/gm, '')
     argv    = args.split(' ').filter (s) -> return s != '' # "
 
-    if command in shellCommands
+    if command in externalCommands
       childEnv = Object.create(process.env)
       robot.logger.info "spawning #{command} with args: #{args}"
       buffer = ''
