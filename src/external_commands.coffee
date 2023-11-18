@@ -69,14 +69,20 @@ module.exports = (robot) ->
   findFind = (findCommandCallback) ->
     exec "find --version", (error, stdout, stderr) ->
        if error && error.code != 0
-         robot.logger.error error
-         robot.logger.error "error retrieving commands from external commands:\n#{util.inspect error}"
-         robot.logger.error stderr
-         robot.logger.error "Error determining find version"
+         # Find is BSD on Mac
+         if /illegal/.test stderr
+           findCommand = "find #{env.HUBOT_EXTERNAL_COMMANDS_DIR} -maxdepth 1 -perm +111 -not -type d -print"
+           findCommandCallback(findCommand)
+         else
+           robot.logger.error error
+           robot.logger.error "error retrieving commands from external commands:\n#{util.inspect error}"
+           robot.logger.error stderr
+           robot.logger.error "Error determining find version"
        else if stdout.match(/GNU findutils/)
          findCommand = "find #{env.HUBOT_EXTERNAL_COMMANDS_DIR} -maxdepth 1 -executable -not -type d -print"
          findCommandCallback(findCommand)
        else
+         # Just assume is BSD find in all cases not matching GNU
          findCommand = "find #{env.HUBOT_EXTERNAL_COMMANDS_DIR} -maxdepth 1 -perm +111 -not -type d -print"
          findCommandCallback(findCommand)
 
