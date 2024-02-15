@@ -2,12 +2,12 @@
 
 # Purpose
 
-This is a hubot extension designed to allow you to break free from node, coffeescript, and javascript and still have all the chat operations you'd like. 
+This is a hubot extension designed to allow you to break free from node, coffeescript, and javascript and still have all the chat operations you'd like.
 
-You load executable commands in the `HUBOT_EXTERNAL_COMMANDS_DIR` directory. Hubot then loads each file that has executable permissions as a command. Optionally if you have a `<command>.desc` along side the `<command>` executable file, it will read in the lines from the desc onto the help menu. 
+You load executable commands in the `HUBOT_EXTERNAL_COMMANDS_DIR` directory. Hubot then loads each file that has executable permissions as a command. Optionally if you have a `<command>.desc` along side the `<command>` executable file, it will read in the lines from the desc onto the help menu.
 
 
-# Setup 
+# Setup
 
 # Install & Configure
 
@@ -51,7 +51,7 @@ When loading, hubot will process the command foo with no help string. Sprint wil
   * Executables/scripts must be executable and have ownership open to the hubot user
   * Placing scripts in subdirectories of `HUBOT_EXTERNAL_COMMANDS_DIR` will not work.
   * THe bot must be addressed directly to use the command. (respond vs hear). This may change in the future.
-   
+
 
 # Contributors
 
