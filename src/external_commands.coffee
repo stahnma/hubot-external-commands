@@ -44,7 +44,10 @@ module.exports = (robot) ->
       if command.match /\/.*\./
         return
       command = command.replace /^.*\//, ''
-      robot.commands.push "#{robot.name} #{command}"
+      if robot.alias != "" and robot.alias != null
+        robot.commands.push "#{robot.alias}#{command}"
+      else
+        robot.commands.push "#{robot.name} #{command}"
       externalCommands.push(command)
       robot.commands = Array.from(new Set(robot.commands))
       findAndPushCommands(env.HUBOT_EXTERNAL_COMMANDS_DIR)
@@ -63,7 +66,10 @@ module.exports = (robot) ->
           # if the line does not start with the <filename>, skip it
           if !c.startsWith(file.replace('.desc', ''))
             return
-          robot.commands.push "#{robot.name} " + c
+          if robot.alias != "" and robot.alias != null
+            robot.commands.push "#{robot.alias}" + c
+          else
+            robot.commands.push "#{robot.name} " + c
       robot.commands = Array.from(new Set(robot.commands))
 
   findFind = (findCommandCallback) ->
