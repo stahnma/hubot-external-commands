@@ -131,6 +131,7 @@ module.exports = (robot) ->
           try
             jsonOutput = JSON.parse(buffer)
             jsonOutput.channel = msg.message.room
+            jsonOutput.as_user = true
             robot.logger.info "Sending JSON payload via slack API"
             { WebClient } = require('@slack/web-api');
             slackWebClient = new WebClient(process.env.HUBOT_SLACK_TOKEN);
