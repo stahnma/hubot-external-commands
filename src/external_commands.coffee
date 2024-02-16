@@ -37,6 +37,28 @@ module.exports = (robot) ->
   robot.logger.info "HUBOT_EXTERNAL_COMMANDS_DIR: #{env.HUBOT_EXTERNAL_COMMANDS_DIR}"
   externalCommands = []
 
+  removeCommandsNoHelpText = (commands) ->
+    commandsWithHelpText = {}
+
+    # Iterate through the commands to find commands with help text
+    for command in commands
+      parts = command.split(' - ')
+      if parts.length > 1
+        commandKey = parts[0]
+        commandsWithHelpText[commandKey] = command
+
+    # Filter out commands without help text if there exists a corresponding command with help text
+    filteredCommands = commands.filter((command) ->
+      parts = command.split(' - ')
+      if parts.length == 1
+        commandKey = parts[0]
+        not commandsWithHelpText.hasOwnProperty(commandKey)
+      else
+        true
+    )
+
+    return filteredCommands
+
   # Helper Functions
   addCommand = (command) ->
     if command != ''
@@ -71,6 +93,7 @@ module.exports = (robot) ->
           else
             robot.commands.push "#{robot.name} " + c
       robot.commands = Array.from(new Set(robot.commands))
+      robot.commands = removeCommandsNoHelpText(robot.commands)
 
   findFind = (findCommandCallback) ->
     exec "find --version", (error, stdout, stderr) ->
