@@ -28,7 +28,7 @@ path  = require 'path'
 if !env.HUBOT_EXTERNAL_COMMANDS_DIR
   env.HUBOT_EXTERNAL_COMMANDS_DIR = "./shell"
 else
-	env.HUBOT_EXTERNAL_COMMANDS_DIR = env.HUBOT_EXTERNAL_COMMANDS_DIR
+  env.HUBOT_EXTERNAL_COMMANDS_DIR = env.HUBOT_EXTERNAL_COMMANDS_DIR
 
 env.PATH = env.HUBOT_EXTERNAL_COMMANDS_DIR + ':' + env.PATH
 
@@ -106,7 +106,6 @@ module.exports = (robot) ->
   # Init
   refreshCommands(null)
 
-  ## Robot commands
   robot.respond /refresh-commands\s*$/i, (msg) ->
     refreshCommands(msg)
 
@@ -128,7 +127,16 @@ module.exports = (robot) ->
       child.on 'close', (code, signal) ->
         if code != 0
           buffer += "\n[exit: " + code + "]\n"
-        msg.send buffer
+        if /slack/.test(robot.adapterName)
+          try
+            jsonOutput = JSON.parse(buffer)
+            jsonOutput.channel = msg.message.room
+            robot.logger.info "Sending JSON payload via slack API"
+            { WebClient } = require('@slack/web-api');
+            slackWebClient = new WebClient(process.env.HUBOT_SLACK_TOKEN);
+            slackWebClient.chat.postMessage(jsonOutput);
+          catch
+            msg.send buffer
 
       robot.logger.info "Waiting on the child for #{command}"
     else
