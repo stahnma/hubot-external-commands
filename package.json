@@ -1,6 +1,6 @@
 {
   "name": "hubot-external-commands",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "description": "This is a hubot extension designed to allow you to break free from node and javascript and still have all the chat operations you'd like.",
   "author": "stahnma",
   "license": "MIT",
