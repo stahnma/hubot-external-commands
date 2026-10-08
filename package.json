@@ -1,14 +1,15 @@
 {
   "name": "hubot-external-commands",
   "version": "0.2.1",
-  "description": "This is a hubot extension designed to allow you to break free from node, coffeescript, and javascript and still have all the chat operations you'd like.",
+  "description": "This is a hubot extension designed to allow you to break free from node and javascript and still have all the chat operations you'd like.",
   "author": "stahnma",
   "license": "MIT",
-  "main": "index.coffee",
+  "main": "index.js",
   "homepage": "https://github.com/stahnma/hubot-external-commands",
   "scripts": {
-    "dev": "HUBOT_EXTERNAL_COMMANDS_DIR=$PWD/fixtures/shell PATH=$PATH:node_modules/.bin hubot -r src -r fixtures/help --alias '!'",
-    "lint": "jshint src/*.js test/*.js"
+    "dev": "HUBOT_EXTERNAL_COMMANDS_DIR=$PWD/fixtures/shell hubot -r src -r fixtures/help --alias \"!\"",
+    "test": "node --test test/*_test.mjs",
+    "lint": "jshint index.js src/*.js"
   },
   "repository": {
     "type": "git",
@@ -26,15 +27,17 @@
     "url": "https://github.com/stahnma/hubot-external-commands/issues"
   },
   "devDependencies": {
-    "chai": "^4.3.10",
-    "coffee-script": "^1.12.7",
-    "hubot-test-helper": "^1.9.0",
-    "js-beautify": "^1.14.3",
-    "jshint": "^2.13.4",
-    "matchdep": "^2.0.0",
-    "mocha": "^10.2.0",
-    "nock": "^13.3.3",
-    "sinon": "^16.0.0",
-    "sinon-chai": "^3.7.0"
+    "hubot": "^14.1.0",
+    "jshint": "^2.13.6"
+  },
+  "files": [
+    "index.js",
+    "src"
+  ],
+  "engines": {
+    "node": ">= 18"
+  },
+  "peerDependencies": {
+    "hubot": ">= 11"
   }
 }
